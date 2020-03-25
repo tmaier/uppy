@@ -2,6 +2,34 @@
 
 const { getProtectedHttpAgent, FORBIDDEN_IP_ADDRESS } = require('../../src/server/helpers/request')
 const request = require('request')
+const http = require('http')
+const https = require('https')
+
+describe('test getProtectedHttpAgent', () => {
+  test('setting "https:" as protocol', (done) => {
+    const Agent = getProtectedHttpAgent('https:')
+    expect(Agent).toEqual(https.Agent)
+    done()
+  })
+
+  test('setting "https" as protocol', (done) => {
+    const Agent = getProtectedHttpAgent('https')
+    expect(Agent).toEqual(https.Agent)
+    done()
+  })
+
+  test('setting "http:" as protocol', (done) => {
+    const Agent = getProtectedHttpAgent('http:')
+    expect(Agent).toEqual(http.Agent)
+    done()
+  })
+
+  test('setting "http" as protocol', (done) => {
+    const Agent = getProtectedHttpAgent('http')
+    expect(Agent).toEqual(http.Agent)
+    done()
+  })
+})
 
 describe('test protected request Agent', () => {
   test('allows URLs without IP addresses', (done) => {
@@ -60,20 +88,6 @@ describe('test protected request Agent', () => {
     request(options, (err) => {
       expect(err).toBeInstanceOf(Error)
       expect(err.message).toEqual(FORBIDDEN_IP_ADDRESS)
-      done()
-    })
-  })
-
-  test('blocks URLs that have DNS pinned to a private IP address', (done) => {
-    const options = {
-      uri: 'http://127.0.0.1.xip.io:8090',
-      method: 'GET',
-      agentClass: getProtectedHttpAgent('http', true)
-    }
-
-    request(options, (err) => {
-      expect(err).toBeTruthy()
-      expect(err.message.startsWith(FORBIDDEN_IP_ADDRESS)).toEqual(true)
       done()
     })
   })
