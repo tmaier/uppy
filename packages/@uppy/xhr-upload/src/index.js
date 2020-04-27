@@ -8,6 +8,8 @@ const settle = require('@uppy/utils/lib/settle')
 const EventTracker = require('@uppy/utils/lib/EventTracker')
 const ProgressTimeout = require('@uppy/utils/lib/ProgressTimeout')
 const RateLimitedQueue = require('@uppy/utils/lib/RateLimitedQueue')
+const NetworkError = require('@uppy/utils/lib/NetworkError')
+const isNetworkError = require('@uppy/utils/lib/isNetworkError')
 
 function buildResponseError (xhr, error) {
   // No error message
@@ -17,6 +19,11 @@ function buildResponseError (xhr, error) {
   // Got something else
   if (!(error instanceof Error)) {
     error = Object.assign(new Error('Upload error'), { data: error })
+  }
+
+  if (isNetworkError(xhr)) {
+    error = new NetworkError(error, xhr)
+    return error
   }
 
   error.request = xhr
@@ -90,7 +97,13 @@ module.exports = class XHRUpload extends Plugin {
        * @param {XMLHttpRequest | respObj} response the response object (XHR or similar)
        */
       getResponseError (responseText, response) {
-        return new Error('Upload error')
+        let error = new Error('Upload error')
+
+        if (isNetworkError(response)) {
+          error = new NetworkError(error, response)
+        }
+
+        return error
       },
       /**
        * Check if the response from the upload endpoint indicates that the upload was successful.
@@ -217,6 +230,9 @@ module.exports = class XHRUpload extends Plugin {
         ? this.createFormDataUpload(file, opts)
         : this.createBareUpload(file, opts)
 
+      const xhr = new XMLHttpRequest()
+      this.uploaderEvents[file.id] = new EventTracker(this.uppy)
+
       const timer = new ProgressTimeout(opts.timeout, () => {
         xhr.abort()
         queuedRequest.done()
@@ -224,9 +240,6 @@ module.exports = class XHRUpload extends Plugin {
         this.uppy.emit('upload-error', file, error)
         reject(error)
       })
-
-      const xhr = new XMLHttpRequest()
-      this.uploaderEvents[file.id] = new EventTracker(this.uppy)
 
       const id = cuid()
 
@@ -358,7 +371,8 @@ module.exports = class XHRUpload extends Plugin {
         size: file.data.size,
         fieldname: opts.fieldName,
         metadata: fields,
-        httpMethod: this.opts.method,
+        httpMethod: opts.method,
+        useFormData: opts.formData,
         headers: opts.headers
       }).then((res) => {
         const token = res.token

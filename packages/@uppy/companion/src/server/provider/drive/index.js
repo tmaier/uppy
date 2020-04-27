@@ -102,28 +102,24 @@ class Drive extends Provider {
       .request(done)
   }
 
-  _exportGsuiteFile ({ id, token }) {
-    logger.info(`calling google file export for ${id}`, 'provider.drive.export')
+  _exportGsuiteFile (id, token, mimeType) {
+    logger.info(`calling google file export for ${id} to ${mimeType}`, 'provider.drive.export')
     return this.client
       .query()
       .get(`files/${id}/export`)
-      .qs({ supportsAllDrives: true, mimeType: 'application/pdf' })
+      .qs({ supportsAllDrives: true, mimeType })
       .auth(token)
       .request()
   }
 
-  _getGsuiteFileMeta ({ id, token }, onDone) {
+  _getGsuiteFileMeta (id, token, mimeType, onDone) {
     logger.info(`calling Gsuite file meta for ${id}`, 'provider.drive.export.meta')
     return this.client
       .query()
       .head(`files/${id}/export`)
-      .qs({ supportsAllDrives: true, mimeType: 'application/pdf' })
+      .qs({ supportsAllDrives: true, mimeType })
       .auth(token)
       .request(onDone)
-  }
-
-  _isGsuiteFile (mimeType) {
-    return mimeType.startsWith('application/vnd.google')
   }
 
   download ({ id, token }, onData) {
@@ -135,8 +131,8 @@ class Drive extends Provider {
       }
 
       let requestStream
-      if (this._isGsuiteFile(body.mimeType)) {
-        requestStream = this._exportGsuiteFile({ id, token })
+      if (adapter.isGsuiteFile(body.mimeType)) {
+        requestStream = this._exportGsuiteFile(id, token, adapter.getGsuiteExportType(body.mimeType))
       } else {
         requestStream = this.client
           .query()
@@ -171,7 +167,7 @@ class Drive extends Provider {
         return done(err)
       }
 
-      if (this._isGsuiteFile(body.mimeType)) {
+      if (adapter.isGsuiteFile(body.mimeType)) {
         // Google Docs file sizes can be determined
         // while Google sheets file sizes can't be determined
         const googleDocMimeType = 'application/vnd.google-apps.document'
@@ -181,7 +177,7 @@ class Drive extends Provider {
           return
         }
 
-        this._getGsuiteFileMeta({ id, token }, (err, resp) => {
+        this._getGsuiteFileMeta(id, token, adapter.getGsuiteExportType(body.mimeType), (err, resp) => {
           if (err || resp.statusCode !== 200) {
             err = this._error(err, resp)
             logger.error(err, 'provider.drive.docs.size.error')

@@ -1,3 +1,7 @@
+# Changelog
+
+<!--lint disable no-literal-urls-->
+
 Our combined changelog and roadmap. It contains todos as well as dones.
 
 Items can be optionally be tagged tagged by GitHub owner issue if discussion
@@ -53,6 +57,7 @@ PRs are welcome! Please do open an issue to discuss first if it's a big feature,
 - [ ] *: upgrade to Preact X
 - [ ] dashboard: hiding pause/resume from the UI by default (with option) would be good too probably (we could auto pause and show a resume button when detecting a network change to a metered network using https://devdocs.io/dom/networkinformation/type)
 - [ ] dashboard: showing links to files should be turned off by default (it's great for devs, they can opt-in, but for end-user UI it's weird and can even lead to problems though)
+- [ ] dashboard: set default `trigger: null`, see https://github.com/transloadit/uppy/pull/2144#issuecomment-600581690
 - [ ] docs: Completely drop soft IE10 (and IE11?) support
 - [ ] form: make the `multipleResults` option `true` by default
 - [ ] locales: Remove the old es_GL name alias for gl_ES. Keep gl_ES only.
@@ -64,12 +69,12 @@ PRs are welcome! Please do open an issue to discuss first if it's a big feature,
 - [ ] xhr: set the `limit` option to a sensible default, like 10
 - [ ] companion: add more reliable tests to catch edge cases in companion. For example testing that oauth works for multiple companion instances that use a master Oauth domain.
 
-## 1.15
+## 1.16
 
 - [ ] plugins: WordPress Back-end plugin. Should be another Transloadit Integration based on Robodog Dashboard(?) we should add a provider, and possibly offer already-uploaded content
 - [ ] webcam: Specify the resolution of the webcam images/video. We should add a way to specify any custom 'constraints' (aspect ratio, resolution, mimetype (`/video/mp4;codec=h264`), bits per second, etc) to the Webcam plugin #876
 
-## 1.14
+## 1.15
 
 - [ ] dashboard: add option to use `body` or `window` or CSS selector as drop zone / paste zone as well, `DropPasteTarget` #1593 (@arturi)
 - [ ] dashboard/dragndrop/fileinput: Add a `disabled` (`true`||`false`) option (https://github.com/transloadit/uppy/issues/1530)
@@ -83,7 +88,7 @@ PRs are welcome! Please do open an issue to discuss first if it's a big feature,
 
 # next
 
-## 1.13
+## 1.14
 
 - [ ] test: add deepFreeze to test that state in not mutated anywhere by accident, use default's store #320
 - [ ] provider: add Box (@ife)
@@ -98,8 +103,78 @@ PRs are welcome! Please do open an issue to discuss first if it's a big feature,
 - [ ] core: add maxTotalFileSize restriction #514 (@arturi)
 - [ ] companion: what happens if access token expires during/between an download & upload (@ife)
 - [ ] plugins: review & merge screenshot+screencast support similar to Webcam #148 (@arturi)
-- [ ] core: report information about the device --^ (@arturi)
 - [ ] providers: Provider Browser don't handle uppy restrictions, can we hide things that don't match the restrictions in Google Drive and Instagram? #1827 (@arturi)
+- [ ] s3: immediately start uploading files once the signed URL is generated (#2060, @goto-bus-stop)
+
+## 1.13.2
+
+Released: 2020-04-15
+
+| Package | Version | Package | Version |
+|-|-|-|-|
+| @uppy/aws-s3-multipart | 1.6.2 | @uppy/progress-bar | 1.3.11 |
+| @uppy/aws-s3 | 1.6.2 | @uppy/provider-views | 1.6.3 |
+| @uppy/companion | 1.13.1 | @uppy/react | 1.6.3 |
+| @uppy/core | 1.10.2 | @uppy/robodog | 1.6.4 |
+| @uppy/dashboard | 1.8.3 | @uppy/status-bar | 1.6.3 |
+| @uppy/drag-drop | 1.4.10 | @uppy/thumbnail-generator | 1.5.10 |
+| @uppy/dropbox | 1.4.3 | @uppy/transloadit | 1.5.8 |
+| @uppy/facebook | 1.1.3 | @uppy/tus | 1.5.10 |
+| @uppy/file-input | 1.4.9 | @uppy/url | 1.5.3 |
+| @uppy/form | 1.3.12 | @uppy/utils | 2.4.2 |
+| @uppy/golden-retriever | 1.3.11 | @uppy/webcam | 1.6.3 |
+| @uppy/google-drive | 1.5.3 | @uppy/xhr-upload | 1.5.8 |
+| @uppy/informer | 1.5.3 | remark-lint-uppy | 0.1.1 |
+| @uppy/instagram | 1.4.3 | uppy | 1.13.2 |
+| @uppy/onedrive | 1.1.3 | - | - |
+
+- @uppy/companion: mimetype could be undefined (#2201 / @ifedapoolarewaju)
+
+## 1.13.1
+
+Released 2020-04-14
+
+Mainly fixes for the Dashboard provider/tab list in IE10 and correct Gsuit file extensions in Companion.
+
+- @uppy/dashboard: Dashboard tablist IE10 flex fix and refactor (#2192 / @arturi)
+- @uppy/companion: set debug based on `NODE_ENV` only if the env var is available (#2189 / @ifedapoolarewaju)
+- @uppy/companion: fix uploader protocol validation (#2197 / @ifedapoolarewaju)
+- @uppy/companion: set GSuite file extensions (#2194 / @ifedapoolarewaju)
+- docs: fix minor typo in Dashboard docs (#2193 / @mhulet)
+- website: add markdown linting using remark (#2181 / @goto-bus-stop)
+
+## 1.13.0
+
+Released 2020-04-08
+
+| Package | Version | Package | Version |
+|-|-|-|-|
+| @uppy/aws-s3-multipart | 1.6.0 | @uppy/onedrive | 1.1.1 |
+| @uppy/aws-s3 | 1.6.0 | @uppy/progress-bar | 1.3.9 |
+| @uppy/companion | 1.12.0 | @uppy/provider-views | 1.6.1 |
+| @uppy/core | 1.10.0 | @uppy/react | 1.6.1 |
+| @uppy/dashboard | 1.8.1 | @uppy/robodog | 1.6.2 |
+| @uppy/drag-drop | 1.4.8 | @uppy/status-bar | 1.6.1 |
+| @uppy/dropbox | 1.4.1 | @uppy/thumbnail-generator | 1.5.8 |
+| @uppy/facebook | 1.1.1 | @uppy/transloadit | 1.5.6 |
+| @uppy/file-input | 1.4.7 | @uppy/tus | 1.5.8 |
+| @uppy/form | 1.3.10 | @uppy/url | 1.5.1 |
+| @uppy/golden-retriever | 1.3.9 | @uppy/utils | 2.4.0 |
+| @uppy/google-drive | 1.5.1 | @uppy/webcam | 1.6.1 |
+| @uppy/informer | 1.5.1 | @uppy/xhr-upload | 1.5.6 |
+| @uppy/instagram | 1.4.1 | uppy | 1.13.0 |
+| @uppy/locales | 1.13.1 | - | - |
+
+This Release improves Google Drive's GSuite files support to export files to more flexible + popular formats
+
+- @uppy/companion: favor xlsx, docx, ppt formats when export gsuite files (#2182 / @ifedapoolarewaju)
+- @uppy/locales: remove legacy translations that have been re-translated (@goto-bus-stop)
+- @uppy/companion: use full path for provider URL when the root path depends on user input (#2176 / @ifedapoolarewaju)
+- @uppy/aws-s3: handle upload internally instead of deferring to xhr-upload (#2060 / @goto-bus-stop)
+- @uppy/aws-s3: fix missing typescript type for `metaFields` option (#1866 / @goto-bus-stop)
+- @uppy/robodog: Pass hideUploadButton to Dashboard in Robodog too (#2169 / @arturi)
+- @uppy/dashboard: add `theme` option to typescript typings (@goto-bus-stop)
+- @uppy/aws-s3-multipart: emit upload-error when companion returns error during upload instantiation (#2168 / @ifedapoolarewaju)
 
 ## 1.12.1
 
@@ -132,7 +207,7 @@ This release adds the Romanian language, more input validation in Companion, and
 
 - @uppy/companion: validate all client provided upload data. (#2160 / @ifedapoolarewaju)
 - @uppy/dashboard: allow custom metadata fields when editing files (#2147 / @galli-leo)
-- @uppy/locales:  Remove obsolete strings from language files. (894c739 / @goto-bus-stop)
+- @uppy/locales: Remove obsolete strings from language files. (894c739 / @goto-bus-stop)
 - @uppy/locales: Romanian (ro_RO) language pack added. (#2162 / @akizor)
 - @uppy/robodog: Add Facebook and OneDrive to the bundle. (#2165 / @arturi)
 - @uppy/transloadit: fix progress with very different Assembly runtimes (#2143 / @agreene-coursera)
@@ -174,6 +249,7 @@ This Release offers Dashboard redesign (Dark mode), and support for Google Docs 
 - @uppy/companion: add support to download gsuite (google docs, google spreadsheet) files (#2145 / @ifedapoolarewaju)
 - @uppy/locales: Croatian translations added (#2150 / @dkisic)
 - @uppy/core: Only _startIfAutoProceed if some files were actually added (#2146 / @arturi)
+- @uppy/thumbnail-generator: replace exif-js with exifr in thumbnail-generator (#2140 / @MikeKovarik)
 
 ## 1.10.1
 
@@ -285,7 +361,7 @@ This release adds `@uppy/onedrive` to `uppy`’s `package.json`, fixing the bug 
 - build: Actually check types. Use tsd so our typings test files can actually assert that types are correct (#1918 / @goto-bus-stop )
 - @uppy/companion: Only set cookies for providers that need it (#2055 / @ifedapoolarewaju)
 - docs: Add Content-Type header to presigned url example (#2061 / @scherroman)
-- uppy: Add onedrive to uppy package.json ([349247607513bc6b33bf2a90ab0b82f8f2e81d78](https://github.com/transloadit/uppy/commit/349247607513bc6b33bf2a90ab0b82f8f2e81d78 / @arturi))
+- uppy: Add onedrive to uppy package.json ([349247607513bc6b33bf2a90ab0b82f8f2e81d78](https://github.com/transloadit/uppy/commit/349247607513bc6b33bf2a90ab0b82f8f2e81d78) / @arturi)
 
 ## 1.9.1
 
@@ -1235,7 +1311,7 @@ New versions in this release:
 
 Changes:
 
-- build: Add initial version table script [skip ci] (@goto-bus-stop)
+- build: Add initial version table script (@goto-bus-stop)
 - build: Add more checks to release script (#1050 / @goto-bus-stop)
 - build: start companion once in tests (#1052 / @ifedapoolarewaju)
 - buid: set companion config values when running test (@ifedapoolarewaju)
@@ -1490,7 +1566,7 @@ Changed strings:
 
 Released: 2018-05-14.
 
-- core: Pass `allowedFileTypes` and `maxNumberOfFiles` to input[type=file] in UI components: Dashboard, DragDrop, FileInput (#814 / @arturi)
+- core: Pass `allowedFileTypes` and `maxNumberOfFiles` to `input[type=file]` in UI components: Dashboard, DragDrop, FileInput (#814 / @arturi)
 - transloadit: Update Transloadit plugin's Uppy Server handling (#804 / @goto-bus-stop)
 - tus: respect `limit` option for upload parameter requests (#817 / @ap--)
 - docs: Explain name `metadata` vs. `$_FILES[]["name"]` (#1c1bf2e / @goto-bus-stop)
@@ -1953,7 +2029,7 @@ Favorite Uppy Server version: 0.5.0.
 - website: try on a Github ribbon http://tholman.com/github-corners/ (@arturi / #150)
 - website: different meta description for pages and post (@arturi)
 - server: well documented README (@ifedapoolarewaju)
-- react: [WIP] High-level React Components (@goto-bus-stop / #170)
+- react: High-level React Components (@goto-bus-stop / #170)
 - core: add `uppy.close()` for tearing down an Uppy instance (@goto-bus-stop / #182)
 - core: replace `babel-preset-es2015-loose` by standard es2015 preset with `loose` option (@goto-bus-stop / #174)
 
